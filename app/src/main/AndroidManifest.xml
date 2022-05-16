@@ -16,6 +16,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ViewTestActivity"
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- setLink()에 전달하는 링크와 동일한 host, path, scheme -->
+                <data
+                    android:host="safecarrier.page.link"
+                    android:path="/invite"
+                    android:scheme="https" />
+
+                <data
+                    android:host="safecarrier.page.link"
+                    android:path="/invite"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LinkTestActivity"/>
     </application>
 
 </manifest>
