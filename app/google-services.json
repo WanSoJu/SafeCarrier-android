@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "105488105845",
+    "project_id": "safecarrier-67ba0",
+    "storage_bucket": "safecarrier-67ba0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105488105845:android:8ee55be0da6bdaed13133c",
+        "android_client_info": {
+          "package_name": "com.example.safecarrier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105488105845-tatdsuenud3iqastmtec7gf8unuqcgk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safecarrier",
+            "certificate_hash": "8b3928ab1263048d3d37ce0fd800315eecb75674"
+          }
+        },
+        {
+          "client_id": "105488105845-kk6flrm0pq9a3ampmikvcd7hd0l1rc08.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZUiQQA0CDW_1coWcIF6pmL1nGda-jEVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105488105845-kk6flrm0pq9a3ampmikvcd7hd0l1rc08.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
