@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,13 +36,14 @@ public class LinkTestActivity extends AppCompatActivity {
 
     }
 
-    private String generateRandomString(){
+    private String generateRandomLid(){
         //link 에 들어갈 랜덤한 문자열을 생성
+        //여기서 생성된 값이 lid, POST /data 때 같이 백으로 보내주어야함
         return "47dsfdfs";
     }
 
     private Uri generateUrl(){
-        return Uri.parse("https://safecarrier.page.link/invite?lid="+generateRandomString());
+        return Uri.parse("https://safecarrier.page.link/invite?lid="+generateRandomLid());
     }
 
     private void createDynamicLink() {
@@ -51,7 +53,6 @@ public class LinkTestActivity extends AppCompatActivity {
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder(getPackageName()).build())
                 .buildDynamicLink();
         Uri longUri = dynamicLink.getUri();   //긴 URI
-//        System.out.println("long uri = " + dylinkuri);
 
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
@@ -62,7 +63,8 @@ public class LinkTestActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<ShortDynamicLink> task) {
                         if (task.isSuccessful()) {
                             Uri shortLink = task.getResult().getShortLink();
-                            System.out.println("shortLink = " + shortLink);    //짧은 URI -> 이걸 사용자가 공유하도록 함!
+                            System.out.println("shortLink = " + shortLink);    //짧은 URI -> 이걸 사용자가 공유하도록 함! + POST /data 때 백으로 전송
+                            Toast.makeText(getApplicationContext(), (CharSequence) shortLink,Toast.LENGTH_LONG).show();
                         } else {
 //                            Log.w(TAG, task.toString());
                         }
