@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class EnterPassword extends AppCompatActivity {
 
+    DecryptText decryptText;
     EditText enterPassword;
     Button submitPwBtn;
     boolean checkPw;
@@ -18,6 +19,8 @@ public class EnterPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_password);
+
+        decryptText=new DecryptText();
 
         enterPassword = (EditText) findViewById(R.id.enterPassword);
         submitPwBtn = (Button) findViewById(R.id.submitPw);
@@ -32,9 +35,9 @@ public class EnterPassword extends AppCompatActivity {
                 }
 
                 if(checkPw==true) { //파일확인창으로 이동
-
+                    getSupportFragmentManager().beginTransaction().replace(R.id.deFrame, decryptText).commit();
                 } else {
-
+                    Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다", Toast.LENGTH_LONG).show();
                 }
                 //Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
                 //startActivity(intent);

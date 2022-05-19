@@ -38,6 +38,7 @@
         </activity>
         <activity android:name=".LinkTestActivity"/>
         <activity android:name=".EnterPassword"/>
+        <activity android:name=".DecryptText"/>
     </application>
 
 </manifest>
