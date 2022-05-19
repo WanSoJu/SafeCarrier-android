@@ -37,6 +37,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LinkTestActivity"/>
+        <activity android:name=".EnterPassword"/>
     </application>
 
 </manifest>

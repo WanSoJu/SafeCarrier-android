@@ -30,4 +30,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/gotoEnterPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="goto Enter PW"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="656dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
