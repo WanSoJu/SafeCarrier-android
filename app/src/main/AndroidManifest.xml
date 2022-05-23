@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.safecarrier">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,6 +42,7 @@
         <activity android:name=".LinkTestActivity"/>
         <activity android:name=".EnterPassword"/>
         <activity android:name=".DecryptText"/>
+        <activity android:name=".CustomDialog"/>
     </application>
 
 </manifest>
