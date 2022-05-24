@@ -1,5 +1,6 @@
 package com.example.safecarrier;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,11 @@ public class EnterPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_password);
 
-        decryptText=new DecryptText();
+        try {
+            decryptText=new DecryptText();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         enterPassword = (EditText) findViewById(R.id.enterPassword);
         submitPwBtn = (Button) findViewById(R.id.submitPw);
@@ -35,7 +40,8 @@ public class EnterPassword extends AppCompatActivity {
                 }
 
                 if(checkPw==true) { //파일확인창으로 이동
-                    getSupportFragmentManager().beginTransaction().replace(R.id.deFrame, decryptText).commit();
+                    Intent intent2 = new Intent(getApplicationContext(), DecryptText.class);
+                    startActivity(intent2);
                 } else {
                     Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다", Toast.LENGTH_LONG).show();
                 }
