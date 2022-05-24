@@ -42,7 +42,7 @@
         <activity android:name=".LinkTestActivity"/>
         <activity android:name=".EnterPassword"/>
         <activity android:name=".DecryptText"/>
-        <activity android:name=".CustomDialog"/>
+        <activity android:name=".DialogEn"/>
     </application>
 
 </manifest>
