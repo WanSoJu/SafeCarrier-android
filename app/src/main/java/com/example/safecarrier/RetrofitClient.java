@@ -20,6 +20,13 @@ public class RetrofitClient {
     private static Retrofit retrofit;
     private static Context mContext;
 
+//    public RetrofitClient(){
+//        retrofit = new Retrofit.Builder()
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .baseUrl(baseUrl)
+//            .build();
+//    }
+
     private static class SingletonHolder{
         private static RetrofitClient INSTANCE = new RetrofitClient(mContext);
     }
@@ -50,14 +57,8 @@ public class RetrofitClient {
         restApi.postData(dataDto).enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
-                if(response.isSuccessful()){
                     System.out.println("success");
                     callback.onResponseSuccess(response.code(), response.body());
-
-                }else{
-                    System.out.println("error code");
-                }
-
             }
             @Override
             public void onFailure(Call<Long> call, Throwable t) {
