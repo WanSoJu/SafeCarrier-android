@@ -1,6 +1,7 @@
 package com.example.safecarrier;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class DecryptText extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_text);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE); //캡쳐방지
         textView= (TextView) findViewById(R.id.showText);
         try {
             fileEnc(S, derivedKey);
