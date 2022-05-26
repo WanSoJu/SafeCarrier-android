@@ -40,10 +40,10 @@ public class DialogEn extends AppCompatActivity {
     public String name_Str = "first";
     public int number;
     public String type;
-    public String numberPassword;
+    static public String numberPassword;
     public Uri uri;
     public byte[] encText;
-    public String link;
+    static public String link;
     public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] byteArray;
@@ -63,7 +63,7 @@ public class DialogEn extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
             startActivityForResult(intent, 0);
-            Log.v("test","part1"+intent.getDataString());
+
 
 
 
@@ -165,15 +165,20 @@ public class DialogEn extends AppCompatActivity {
                         public void onResponseSuccess(int code, Object receivedData) {
                             //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
                             linkId = (Long) receivedData;
-                            if (code == 201) {
+                            Log.v("test", "code : "+code);
+                            if (code == 200) {
                                 Log.v("test", "part6 ");
                                 System.out.println("등록 성공");
                                 System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                                link = shortLink;
+                                Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
+                                startActivity(intent);
                             } else if (code == 409) {
-
+                                System.out.println("**********"+code+"*****************");
                                 //이 때의 linkId 는 null
                             } else if (code == 400) {
                                 //잘못된 요청
+                                System.out.println("*************"+code+"**********");
 
                             }
 
@@ -188,14 +193,8 @@ public class DialogEn extends AppCompatActivity {
 
             //sendData
 //            link
-
-            Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
-            startActivity(intent);
-
-            //페이지 넘어가기
             //Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
-            // startActivity(intent);
-
+            //startActivity(intent);
         }
     };
 
