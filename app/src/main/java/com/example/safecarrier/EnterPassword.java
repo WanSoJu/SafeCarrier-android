@@ -9,11 +9,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.safecarrier.dto.DetailResponse;
+
 public class EnterPassword extends AppCompatActivity {
 
     DecryptText decryptText;
     EditText enterPassword;
     Button submitPwBtn;
+    String lid;
     private RetrofitClient retrofit;
     boolean checkPw;
 
@@ -21,6 +24,8 @@ public class EnterPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_password);
+        Intent intent = getIntent();
+        lid=intent.getStringExtra("lid");
         retrofit = RetrofitClient.getInstance(this).createApi();
         try {
             decryptText=new DecryptText();
@@ -34,6 +39,28 @@ public class EnterPassword extends AppCompatActivity {
         submitPwBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                retrofit.getEncryptedData(lid,new RetrofitCallback(){
+                    @Override
+                    public void onResponseSuccess(int code, Object receivedData) {
+                        Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_LONG).show();
+                        if(code==200) { //조회된 암호화된 데이터 + 그 데이터의 원본 파일명
+                            DetailResponse encryptedData = (DetailResponse) receivedData;
+                            byte[] encryptedByte = encryptedData.getEncryptedData(); //암호화된 바이트 -> 이걸 복호화해서 복호화 성공여부 확인해아함
+                            String fileName = encryptedData.getFileName(); //원본 파일명
+
+                            Intent intent2 = new Intent(getApplicationContext(), DecryptImage.class); //일단 다 이미지로 가게 처리
+                            intent2.putExtra("encDataByte",encryptedByte);
+                            intent2.putExtra("fileName",fileName);
+                            startActivity(intent2);
+
+
+                        } else if(code==204) { //잘못된 lid 요청 or 삭제된 데이터에 대한 조회 요청
+                            Toast.makeText(getApplicationContext(), "잘못된 비밀번호이거나 삭제된 데이터입니다.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                });
+                /*
                 if(enterPassword.getText().toString().length()!=0) {
                     checkPw = checkPassword();
                 } else {
@@ -48,17 +75,9 @@ public class EnterPassword extends AppCompatActivity {
                 }
                 //Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
                 //startActivity(intent);
+
+                 */
             }
         });
-
-
-    }
-
-    private boolean checkPassword() {
-        if(enterPassword.getText().toString().equals("password")) { //password에 디비에서 받아온 패스워드 넣기
-            return true;
-        } else {
-            return false;
-        }
     }
 }

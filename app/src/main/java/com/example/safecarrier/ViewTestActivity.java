@@ -46,6 +46,7 @@ public class ViewTestActivity extends AppCompatActivity {
 
                         String lid = link.getQueryParameter("lid"); //이 lid 가 API 문서에 적힌 lid 와 동일한 값
                         Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
+                        intent.putExtra("lid", lid);
                         startActivity(intent);
                         text.setText(lid); //제대로 값이 가져와졌는지 확인용
                         //1. GET /data/{lid} 로 암호화된 데이터 조회
