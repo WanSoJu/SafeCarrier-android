@@ -31,4 +31,8 @@ public interface RestApi {
     @GET("data/read/{lid}")
     Call<Integer> getLeftReadCount(@Path("lid") String lid);
 
+    @Headers("Cache-control: no-cache")
+    @GET("data/link/{linkId}")
+    Call<String> getLinkByLinkId(@Path("linkId") Long linkId);
+
 }
