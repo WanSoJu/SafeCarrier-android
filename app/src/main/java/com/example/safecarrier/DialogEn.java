@@ -3,6 +3,8 @@ package com.example.safecarrier;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,20 +12,48 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.safecarrier.dto.DataDto;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.Objects;
+import java.util.Random;
 
 public class DialogEn extends AppCompatActivity {
     private final static int FILECHOOSER_NORMAL_REQ_CODE = 0;
+    private RetrofitClient retrofit;
     public String name_Str = "first";
+    public int number;
+    public String type;
+    public byte[] numberPassword;
+    public Uri uri;
+    public byte[] encText;
+    public String link;
+    public String lid;
+    Bitmap bitmap;
+    byte[] byteArray;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_en);
         Button testBtn = (Button)findViewById(R.id.button2);
         testBtn.setOnClickListener(t);
+        retrofit = RetrofitClient.getInstance(this).createApi();
 
     }
     Button.OnClickListener t = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
@@ -48,6 +78,8 @@ public class DialogEn extends AppCompatActivity {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Log.v("test","part2"+data.getDataString());
                         name_Str = getImageNameToUri(data.getData());
+                        type = name_Str.substring(name_Str.length()-3, name_Str.length());
+                        uri=data.getData();
                     }
                     else{
 
@@ -67,8 +99,87 @@ public class DialogEn extends AppCompatActivity {
             textView.setText("");
         else
             textView.setText(name_Str);
+        Button createBtn = (Button)findViewById(R.id.button);
+        createBtn.setOnClickListener(t2);
 
     }
+    Button.OnClickListener t2 = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
+        @RequiresApi(api = Build.VERSION_CODES.P)
+        public void onClick(View v) {
+            EditText times = (EditText) findViewById(R.id.editTextNumber);
+            EditText password = (EditText) findViewById(R.id.editTextNumberPassword);
+            EncryptCode encryptCode = new EncryptCode();
+            number = Integer.parseInt(times.getText().toString());
+            try {
+                numberPassword =  encryptCode.PBKDF1(password.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //사진일 경우
+            if (Objects.equals(type, "jpg")) {
+                try {
+                    //Uri를 사진 비트맵으로 변환
+                    bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), uri));
+                    //비트맵 바이트로 변환
+                    byteArray = bitmapToByteArray(bitmap);
+                    //키가 32바이트 이어야만 한다......
+                    encText = encryptCode.encByKey(numberPassword, byteArray);
+                    Log.v("test", "part1 " + encText);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            //텍스트파일이나 동영상일경우 (이게 맞나)
+            else if (Objects.equals(type, "txt") || Objects.equals(type, "mp4")) {
+                //Uri File로 변환
+                File file = null;
+                FileChannel ch = null;
+                file = new File(uri.getPath());
+
+                //File 비트맵으로 변환
+                //bitmap = BitmapFactory.decodeFile(file.getPath());
+                // Log.v("test","part5 "+bitmap.toString());
+
+                //String result = new String(byteArray);
+
+
+            }
+
+            link = createDynamicLink();
+            DataDto dataDto = new DataDto(encText, "IMAGE", number, link, lid, name_Str);
+
+            retrofit.postData(dataDto, new RetrofitCallback() {
+                @Override
+                public void onResponseSuccess(int code, Object receivedData) {
+                    //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
+                    Long linkId = (Long) receivedData;
+                    if (code == 201) {
+                        Log.v("test", "part6 ");
+                        System.out.println("등록 성공");
+                        System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                    } else if (code == 409) {
+                        Log.v("test", "part7 ");
+                        System.out.println("중복된 lid (이미 데이터베이스에 있는 lid 이므로, 다른 랜덤 문자열을 생성해야함");
+                        //이 때의 linkId 는 null
+                    } else if (code == 400) {
+                        //잘못된 요청
+                        Log.v("test", "part8 ");
+                    }
+
+                }
+
+            });
+
+
+            //페이지 넘어가기
+            //Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
+            // startActivity(intent);
+
+        }
+    };
 
     //파일 이름 불러오는 함수
     public String getImageNameToUri(Uri data) {
@@ -81,8 +192,58 @@ public class DialogEn extends AppCompatActivity {
         return imgName;
     }
 
+    public byte[] bitmapToByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;}
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private String generateRandomLid() {
+        //link 에 들어갈 랜덤한 문자열을 생성
+        Random random = new Random();
+        String generatedString = random.ints(97, 123)
+                .limit(12)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        //여기서 생성된 값이 lid, POST /data 때 같이 백으로 보내주어야함
+        //String lid="sdfgfdhdfdgs";
+        lid = generatedString;
+        return generatedString;
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Uri generateUrl() {
+        return Uri.parse("https://safecarrier.page.link/invite?lid=" + generateRandomLid());
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private String createDynamicLink() {
+        final String[] linkSemi = new String[1];
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(generateUrl())
+                .setDomainUriPrefix("https://safecarrier.page.link")
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder(getPackageName()).build())
+                .buildDynamicLink();
+        Uri longUri = dynamicLink.getUri();   //긴 URI
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(longUri)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            Uri shortLink = task.getResult().getShortLink();
+                            System.out.println("shortLink = " + shortLink);    //짧은 URI -> 이걸 사용자가 공유하도록 함! + POST /data 때 백으로 전송
+                            linkSemi[0] = shortLink.toString();
+//                            Toast.makeText(getApplicationContext(), (CharSequence) shortLink,Toast.LENGTH_LONG).show();
+                        } else {
+//                            Log.w(TAG, task.toString());
+                        }
+                    }
+                });
+
+        return linkSemi[0];
+    }
 
 
 
