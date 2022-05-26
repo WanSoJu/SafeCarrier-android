@@ -44,9 +44,10 @@ public class DialogEn extends AppCompatActivity {
     public Uri uri;
     public byte[] encText;
     public String link;
-    public String lid;
+    public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] byteArray;
+    public Long linkId; //1,2,3 이런 값 (기본키)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +153,8 @@ public class DialogEn extends AppCompatActivity {
                 @Override
                 public void onLinkSuccess(String shortLink) {
 
+                    link=shortLink;
+
                     DataDto dataDto = new DataDto(encText, "IMAGE", number, shortLink, lid, name_Str);
                     System.out.println("link not null, sending data to server");
 
@@ -159,7 +162,7 @@ public class DialogEn extends AppCompatActivity {
                         @Override
                         public void onResponseSuccess(int code, Object receivedData) {
                             //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
-                            Long linkId = (Long) receivedData;
+                            linkId = (Long) receivedData;
                             if (code == 201) {
                                 Log.v("test", "part6 ");
                                 System.out.println("등록 성공");
@@ -176,8 +179,15 @@ public class DialogEn extends AppCompatActivity {
                         }
 
                     });
+
+                    //전역변수 linkId 꺼내가서 백으로 요청
+//                    Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
+//                    startActivity(intent);
                 }
             });
+
+            //sendData
+//            link
 
 
 
