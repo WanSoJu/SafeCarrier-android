@@ -3,6 +3,14 @@ package com.example.safecarrier.dto;
 public class DetailResponse {
     private String fileName;
     private byte[] encryptedData;
+    private String dataType;
+
+    public DetailResponse(String dataType) {
+        this.dataType = dataType;
+    }
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
 
     public DetailResponse(){}
     public String getFileName() {
@@ -21,8 +29,9 @@ public class DetailResponse {
         this.encryptedData = encryptedData;
     }
 
-    public DetailResponse(String fileName, byte[] encryptedData) {
+    public DetailResponse(String fileName, byte[] encryptedData,String dataType) {
         this.fileName = fileName;
         this.encryptedData = encryptedData;
+        this.dataType=dataType;
     }
 }
