@@ -148,30 +148,37 @@ public class DialogEn extends AppCompatActivity {
 
             }
 
-            link = createDynamicLink();
-            DataDto dataDto = new DataDto(encText, "IMAGE", number, link, lid, name_Str);
-
-            retrofit.postData(dataDto, new RetrofitCallback() {
+            createDynamicLink(new LinkCallback() {
                 @Override
-                public void onResponseSuccess(int code, Object receivedData) {
-                    //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
-                    Long linkId = (Long) receivedData;
-                    if (code == 201) {
-                        Log.v("test", "part6 ");
-                        System.out.println("등록 성공");
-                        System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
-                    } else if (code == 409) {
-                        Log.v("test", "part7 ");
-                        System.out.println("중복된 lid (이미 데이터베이스에 있는 lid 이므로, 다른 랜덤 문자열을 생성해야함");
-                        //이 때의 linkId 는 null
-                    } else if (code == 400) {
-                        //잘못된 요청
-                        Log.v("test", "part8 ");
-                    }
+                public void onLinkSuccess(String shortLink) {
 
+                    DataDto dataDto = new DataDto(encText, "IMAGE", number, shortLink, lid, name_Str);
+                    System.out.println("link not null, sending data to server");
+
+                    retrofit.postData(dataDto, new RetrofitCallback() {
+                        @Override
+                        public void onResponseSuccess(int code, Object receivedData) {
+                            //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
+                            Long linkId = (Long) receivedData;
+                            if (code == 201) {
+                                Log.v("test", "part6 ");
+                                System.out.println("등록 성공");
+                                System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                            } else if (code == 409) {
+                                Log.v("test", "part7 ");
+                                System.out.println("중복된 lid (이미 데이터베이스에 있는 lid 이므로, 다른 랜덤 문자열을 생성해야함");
+                                //이 때의 linkId 는 null
+                            } else if (code == 400) {
+                                //잘못된 요청
+                                Log.v("test", "part8 ");
+                            }
+
+                        }
+
+                    });
                 }
-
             });
+
 
 
             //페이지 넘어가기
@@ -217,14 +224,16 @@ public class DialogEn extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private String createDynamicLink() {
-        final String[] linkSemi = new String[1];
+    private void createDynamicLink(LinkCallback callback) {
+//        final String[] linkSemi = new String[1];
         DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(generateUrl())
                 .setDomainUriPrefix("https://safecarrier.page.link")
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder(getPackageName()).build())
                 .buildDynamicLink();
         Uri longUri = dynamicLink.getUri();   //긴 URI
+
+        System.out.println("long link: "+longUri.toString());
         FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLongLink(longUri)
                 .buildShortDynamicLink()
@@ -234,15 +243,17 @@ public class DialogEn extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Uri shortLink = task.getResult().getShortLink();
                             System.out.println("shortLink = " + shortLink);    //짧은 URI -> 이걸 사용자가 공유하도록 함! + POST /data 때 백으로 전송
-                            linkSemi[0] = shortLink.toString();
+                            callback.onLinkSuccess(shortLink.toString());
+//                            linkSemi[0] = shortLink.toString();
 //                            Toast.makeText(getApplicationContext(), (CharSequence) shortLink,Toast.LENGTH_LONG).show();
                         } else {
-//                            Log.w(TAG, task.toString());
+                            System.out.println("short link fail");
+                            System.out.println(task.toString());
                         }
                     }
                 });
 
-        return linkSemi[0];
+//        return linkSemi[0];
     }
 
 
