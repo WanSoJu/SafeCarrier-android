@@ -112,4 +112,22 @@ public class RetrofitClient {
         });
 
     }
+
+    public void getLinkByLinkIdPK(Long linkId,  RetrofitCallback callback){
+        restApi.getLinkByLinkId(linkId).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                callback.onResponseSuccess(response.code(),response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println("get Link BY linkId fail");
+
+            }
+        });
+
+    }
+
+
 }
