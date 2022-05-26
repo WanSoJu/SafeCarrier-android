@@ -122,6 +122,10 @@
         android:layout_height="57dp"
         android:layout_marginStart="56dp"
         android:layout_marginBottom="224dp"
+<<<<<<< Updated upstream
+=======
+        android:textSize="18sp"
+>>>>>>> Stashed changes
         android:ems="10"
         android:inputType="numberPassword"
         android:textSize="18sp"
