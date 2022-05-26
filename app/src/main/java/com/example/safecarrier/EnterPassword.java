@@ -14,13 +14,14 @@ public class EnterPassword extends AppCompatActivity {
     DecryptText decryptText;
     EditText enterPassword;
     Button submitPwBtn;
+    private RetrofitClient retrofit;
     boolean checkPw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_password);
-
+        retrofit = RetrofitClient.getInstance(this).createApi();
         try {
             decryptText=new DecryptText();
         } catch (Exception e) {

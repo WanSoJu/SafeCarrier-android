@@ -1,5 +1,6 @@
 package com.example.safecarrier;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class ViewTestActivity extends AppCompatActivity {
                         Uri link = pendingDynamicLinkData.getLink();
 
                         String lid = link.getQueryParameter("lid"); //이 lid 가 API 문서에 적힌 lid 와 동일한 값
+                        Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
+                        startActivity(intent);
                         text.setText(lid); //제대로 값이 가져와졌는지 확인용
                         //1. GET /data/{lid} 로 암호화된 데이터 조회
                         //2. 복호화 -> 복호화 성공시 ""반드시"" GET /data/read/{lid} 호출해서 잔여 조회횟수를 받아와야함
