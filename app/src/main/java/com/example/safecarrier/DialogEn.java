@@ -40,7 +40,7 @@ public class DialogEn extends AppCompatActivity {
     public String name_Str = "first";
     public int number;
     public String type;
-    public byte[] numberPassword;
+    public String numberPassword;
     public Uri uri;
     public byte[] encText;
     public String link;
@@ -103,6 +103,7 @@ public class DialogEn extends AppCompatActivity {
         Button createBtn = (Button)findViewById(R.id.button);
         createBtn.setOnClickListener(t2);
 
+
     }
     Button.OnClickListener t2 = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
         @RequiresApi(api = Build.VERSION_CODES.P)
@@ -112,7 +113,8 @@ public class DialogEn extends AppCompatActivity {
             EncryptCode encryptCode = new EncryptCode();
             number = Integer.parseInt(times.getText().toString());
             try {
-                numberPassword =  encryptCode.PBKDF1(password.getText().toString());
+                numberPassword =  password.getText().toString();
+                Log.v("test", "part1 " + numberPassword);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -124,8 +126,8 @@ public class DialogEn extends AppCompatActivity {
                     //비트맵 바이트로 변환
                     byteArray = bitmapToByteArray(bitmap);
                     //키가 32바이트 이어야만 한다......
-                    encText = encryptCode.encByKey(numberPassword, byteArray);
-                    Log.v("test", "part1 " + encText);
+                    encText = encryptCode.encByKey(numberPassword.getBytes(), byteArray);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -168,12 +170,11 @@ public class DialogEn extends AppCompatActivity {
                                 System.out.println("등록 성공");
                                 System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
                             } else if (code == 409) {
-                                Log.v("test", "part7 ");
-                                System.out.println("중복된 lid (이미 데이터베이스에 있는 lid 이므로, 다른 랜덤 문자열을 생성해야함");
+
                                 //이 때의 linkId 는 null
                             } else if (code == 400) {
                                 //잘못된 요청
-                                Log.v("test", "part8 ");
+
                             }
 
                         }
@@ -181,15 +182,15 @@ public class DialogEn extends AppCompatActivity {
                     });
 
                     //전역변수 linkId 꺼내가서 백으로 요청
-//                    Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
-//                    startActivity(intent);
+
                 }
             });
 
             //sendData
 //            link
 
-
+            Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
+            startActivity(intent);
 
             //페이지 넘어가기
             //Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
