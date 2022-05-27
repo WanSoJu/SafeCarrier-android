@@ -3,14 +3,18 @@ package com.example.safecarrier;
 import com.example.safecarrier.dto.AllResponse;
 import com.example.safecarrier.dto.DataDto;
 import com.example.safecarrier.dto.DetailResponse;
+import com.example.safecarrier.dto.ReadCountResponse;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,10 +33,15 @@ public interface RestApi {
 
     @Headers("Cache-control: no-cache")
     @GET("data/read/{lid}")
-    Call<Integer> getLeftReadCount(@Path("lid") String lid);
+    Call<ReadCountResponse> getLeftReadCount(@Path("lid") String lid);
 
     @Headers("Cache-control: no-cache")
     @GET("data/link/{linkId}")
     Call<String> getLinkByLinkId(@Path("linkId") Long linkId);
+
+    @Headers("Cache-control: no-cache")
+    @Multipart
+    @POST("data/video")
+    Call<String> postFile(@Part MultipartBody.Part file);
 
 }

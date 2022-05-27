@@ -5,9 +5,13 @@ import android.content.Context;
 import com.example.safecarrier.dto.AllResponse;
 import com.example.safecarrier.dto.DataDto;
 import com.example.safecarrier.dto.DetailResponse;
+import com.example.safecarrier.dto.ReadCountResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,8 +43,10 @@ public class RetrofitClient {
     }
 
     private RetrofitClient(Context context){
+
+        Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(baseUrl)
                 .build();
     }
@@ -112,9 +118,9 @@ public class RetrofitClient {
 
     //복호화 성공 시, 복호화 성공 여부 알리고 "이번 조회 이후" 잔여 조회횟수 반환
     public void alertDecryptSuccessAndGetLeftReadcount(String lid,  RetrofitCallback callback){
-        restApi.getLeftReadCount(lid).enqueue(new Callback<Integer>() {
+        restApi.getLeftReadCount(lid).enqueue(new Callback<ReadCountResponse>() {
             @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
+            public void onResponse(Call<ReadCountResponse> call, Response<ReadCountResponse> response) {
                 try {
                     callback.onResponseSuccess(response.code(), response.body());
                 } catch (Exception e) {
@@ -123,7 +129,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
+            public void onFailure(Call<ReadCountResponse> call, Throwable t) {
                 System.out.println("Alert Decryption Success and Get Left Read Count Fail");
             }
         });
@@ -148,6 +154,26 @@ public class RetrofitClient {
             }
         });
 
+    }
+
+    public void uploadFile(MultipartBody.Part body, RetrofitCallback callback){
+        restApi.postFile(body).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    callback.onResponseSuccess(response.code(),response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                t.printStackTrace();
+                System.out.println("upload video fail !!!!!");
+
+            }
+        });
     }
 
 
