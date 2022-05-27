@@ -42,10 +42,10 @@ public class DialogEn extends AppCompatActivity {
     public String name_Str = "first";
     public int number;
     public String type;
-    static public String numberPassword;
+    static public String numberPassword = "setting";
     public Uri uri;
     public String encText;
-    static public String link;
+    static public String link = "setting";
     public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] byteArray;

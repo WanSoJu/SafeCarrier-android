@@ -3,6 +3,8 @@ package com.example.safecarrier;
 
 import static com.example.safecarrier.DialogEn.link;
 import static com.example.safecarrier.DialogEn.numberPassword;
+import static com.example.safecarrier.DialogEnText.link2;
+import static com.example.safecarrier.DialogEnText.numberPassword2;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -25,9 +27,21 @@ public class Encrypfile extends AppCompatActivity {
         setContentView(R.layout.activity_show_link);
         TextView showLink=findViewById(R.id.genlinktextview2);
         TextView showPassword=findViewById(R.id.genlinktextview3);
-        System.out.println("link" + link);
-        showLink.append(link);
-        showPassword.append(numberPassword);
+        if(link == "setting"){
+            System.out.println("link" + link2);
+            showLink.append(link2);
+        }
+        else{
+            System.out.println("link" + link);
+            showLink.append(link);
+        }
+
+        if(numberPassword == "setting"){
+            showPassword.append(numberPassword2);
+        }
+        else {
+            showPassword.append(numberPassword);
+        }
         Button copyLink = (Button)findViewById(R.id.button3);
         copyLink.setOnClickListener(t);
         Button copyPassword = (Button)findViewById(R.id.button4);

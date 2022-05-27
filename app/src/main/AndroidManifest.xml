@@ -50,7 +50,7 @@
         <activity android:name=".DecryptImage"/>
         <activity android:name=".DecryptVideo"/>
         <activity android:name=".DialogEn"/>
-        <activity android:name="Encrypfile"/>
+        <activity android:name=".Encrypfile"/>
         <activity android:name=".DialogEnText"/>
         <activity android:name=".DialogEnVideo"/>
     </application>
