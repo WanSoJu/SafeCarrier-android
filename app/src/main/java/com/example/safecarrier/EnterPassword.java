@@ -38,23 +38,24 @@ public class EnterPassword extends AppCompatActivity {
         submitPwBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                retrofit.getEncryptedData("llhdrvgzsiuy",new RetrofitCallback(){
+                retrofit.getEncryptedData(lid,new RetrofitCallback(){
                     @Override
                     public void onResponseSuccess(int code, Object receivedData) {
 
                         if(code==200) { //조회된 암호화된 데이터 + 그 데이터의 원본 파일명
                             DetailResponse encryptedData = (DetailResponse) receivedData;
-                            byte[] encryptedByte = encryptedData.getEncryptedData(); //암호화된 바이트 -> 이걸 복호화해서 복호화 성공여부 확인해아함
-                            String fileName = encryptedData.getFileName(); //원본 파일명
+                            //String encryptedString = encryptedData.getEncryptedData(); //암호화된 바이트 -> 이걸 복호화해서 복호화 성공여부 확인해아함
+                            //String fileName = encryptedData.getFileName(); //원본 파일명
+                            String dataType = encryptedData.getDataType(); //데이터 타입
 
-                            String stst=new String(encryptedByte);
-
-                            Toast.makeText(getApplicationContext(), stst.substring(0,12), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(),encryptedString.substring(0,20), Toast.LENGTH_LONG).show();
 
                             Intent intent2 = new Intent(getApplicationContext(), DecryptImage.class); //일단 다 이미지로 가게 처리
-                            intent2.putExtra("encDataByte",encryptedByte);
-                            intent2.putExtra("fileName",fileName);
-                            intent2.putExtra("password",enterPassword.toString());
+                            intent2.putExtra("lid",lid);
+                            //intent2.putExtra("encDataString",encryptedString);
+                            //intent2.putExtra("fileName",fileName);
+                            intent2.putExtra("password",enterPassword.getText().toString());
+
                             startActivity(intent2);
 
 
@@ -64,23 +65,7 @@ public class EnterPassword extends AppCompatActivity {
                     }
 
                 });
-                /*
-                if(enterPassword.getText().toString().length()!=0) {
-                    checkPw = checkPassword();
-                } else {
-                    Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
-                }
 
-                if(checkPw==true) { //파일확인창으로 이동
-                    Intent intent2 = new Intent(getApplicationContext(), DecryptText.class);
-                    startActivity(intent2);
-                } else {
-                    Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다", Toast.LENGTH_LONG).show();
-                }
-                //Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
-                //startActivity(intent);
-
-                 */
             }
         });
     }

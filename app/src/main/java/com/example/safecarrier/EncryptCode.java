@@ -32,9 +32,8 @@ public class EncryptCode {
     }
 
     // 사용자 지정 키로 AES256 복호화
-    public static String decByKey(String key, String plainText) throws Exception {
-        //return decByKey(key.getBytes(), Base64.decode(plainText, 0));
-        return "HI";
+    public static byte[] decByKey(String key, String plainText) throws Exception {
+        return decByKey(key.getBytes(), Base64.decode(plainText, 0));
     }
 
     // 사용자 지정 키로 AES256 복호화

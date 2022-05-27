@@ -11,6 +11,7 @@ public class DetailResponse {
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
+    public String getDataType() { return dataType; }
 
     public DetailResponse(){}
     public String getFileName() {

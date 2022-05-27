@@ -58,7 +58,11 @@ public class RetrofitClient {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
                     System.out.println("success");
+                try {
                     callback.onResponseSuccess(response.code(), response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             @Override
             public void onFailure(Call<Long> call, Throwable t) {
@@ -72,7 +76,11 @@ public class RetrofitClient {
         restApi.getDataByLid(lid).enqueue(new Callback<DetailResponse>() {
             @Override
             public void onResponse(Call<DetailResponse> call, Response<DetailResponse> response) {
-                callback.onResponseSuccess(response.code(), response.body());
+                try {
+                    callback.onResponseSuccess(response.code(), response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -88,7 +96,11 @@ public class RetrofitClient {
         restApi.getAllData(id).enqueue(new Callback<List<AllResponse>>() {
             @Override
             public void onResponse(Call<List<AllResponse>> call, Response<List<AllResponse>> response) {
-                callback.onResponseSuccess(response.code(), response.body());
+                try {
+                    callback.onResponseSuccess(response.code(), response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -103,7 +115,11 @@ public class RetrofitClient {
         restApi.getLeftReadCount(lid).enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                callback.onResponseSuccess(response.code(), response.body());
+                try {
+                    callback.onResponseSuccess(response.code(), response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -118,7 +134,11 @@ public class RetrofitClient {
         restApi.getLinkByLinkId(linkId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                callback.onResponseSuccess(response.code(),response.body());
+                try {
+                    callback.onResponseSuccess(response.code(),response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
