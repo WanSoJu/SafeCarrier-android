@@ -47,6 +47,8 @@
         <activity android:name=".LinkTestActivity"/>
         <activity android:name=".EnterPassword"/>
         <activity android:name=".DecryptText"/>
+        <activity android:name=".DecryptImage"/>
+        <activity android:name=".DecryptVideo"/>
         <activity android:name=".DialogEn"/>
         <activity android:name="Encrypfile"/>
     </application>
