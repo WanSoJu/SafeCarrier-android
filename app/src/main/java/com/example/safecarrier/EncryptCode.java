@@ -21,7 +21,7 @@ public class EncryptCode {
         return encByKey(key.getBytes(), value.getBytes());
     }
 
-    // 사용자 지정 키로 AES256 복호화
+    // 사용자 지정 키로 AES256 암호화
     public static byte[] encByKey(byte[] key, byte[] value) throws Exception {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -33,16 +33,17 @@ public class EncryptCode {
 
     // 사용자 지정 키로 AES256 복호화
     public static String decByKey(String key, String plainText) throws Exception {
-        return decByKey(key.getBytes(), Base64.decode(plainText, 0));
+        //return decByKey(key.getBytes(), Base64.decode(plainText, 0));
+        return "HI";
     }
 
     // 사용자 지정 키로 AES256 복호화
-    public static String decByKey(byte[] key, byte[] encText) throws Exception {
+    public static byte[] decByKey(byte[] key, byte[] encText) throws Exception {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(iv));
         byte[] secureKey = cipher.doFinal(encText);
-        return new String(secureKey);
+        return secureKey;
     }
 
     public static byte[] PBKDF1(String password) throws Exception {

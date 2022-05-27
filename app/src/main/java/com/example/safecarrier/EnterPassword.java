@@ -32,25 +32,29 @@ public class EnterPassword extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         enterPassword = (EditText) findViewById(R.id.enterPassword);
         submitPwBtn = (Button) findViewById(R.id.submitPw);
 
         submitPwBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                retrofit.getEncryptedData(lid,new RetrofitCallback(){
+                retrofit.getEncryptedData("llhdrvgzsiuy",new RetrofitCallback(){
                     @Override
                     public void onResponseSuccess(int code, Object receivedData) {
-                        Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_LONG).show();
+
                         if(code==200) { //조회된 암호화된 데이터 + 그 데이터의 원본 파일명
                             DetailResponse encryptedData = (DetailResponse) receivedData;
                             byte[] encryptedByte = encryptedData.getEncryptedData(); //암호화된 바이트 -> 이걸 복호화해서 복호화 성공여부 확인해아함
                             String fileName = encryptedData.getFileName(); //원본 파일명
 
+                            String stst=new String(encryptedByte);
+
+                            Toast.makeText(getApplicationContext(), stst.substring(0,12), Toast.LENGTH_LONG).show();
+
                             Intent intent2 = new Intent(getApplicationContext(), DecryptImage.class); //일단 다 이미지로 가게 처리
                             intent2.putExtra("encDataByte",encryptedByte);
                             intent2.putExtra("fileName",fileName);
+                            intent2.putExtra("password",enterPassword.toString());
                             startActivity(intent2);
 
 
