@@ -47,10 +47,18 @@ public class EnterPassword extends AppCompatActivity {
                             //String encryptedString = encryptedData.getEncryptedData(); //암호화된 바이트 -> 이걸 복호화해서 복호화 성공여부 확인해아함
                             //String fileName = encryptedData.getFileName(); //원본 파일명
                             String dataType = encryptedData.getDataType(); //데이터 타입
+                            Intent intent2 = new Intent(getApplicationContext(), DecryptImage.class);
 
-                            //Toast.makeText(getApplicationContext(),encryptedString.substring(0,20), Toast.LENGTH_LONG).show();
+                            if(dataType.equals("IMAGE")) {
+                                ;
+                            } else if(dataType.equals("TEXT")) {
+                                intent2 = new Intent(getApplicationContext(), DecryptText.class);
+                            } else if(dataType.equals("VIDEO")) {
+                                intent2 = new Intent(getApplicationContext(), DecryptVideo.class);
+                            } else {
 
-                            Intent intent2 = new Intent(getApplicationContext(), DecryptImage.class); //일단 다 이미지로 가게 처리
+                            }
+                             //일단 다 이미지로 가게 처리
                             intent2.putExtra("lid",lid);
                             //intent2.putExtra("encDataString",encryptedString);
                             //intent2.putExtra("fileName",fileName);
