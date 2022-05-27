@@ -1,5 +1,8 @@
 package com.example.safecarrier;
 
+import static com.example.safecarrier.EncryptCode.MakeKey;
+import static com.example.safecarrier.EncryptCode.byteArrayToHexaString;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +29,7 @@ public class DecryptImage extends AppCompatActivity {
     String dataType;
     String password;
     String decString;
+    byte[] makekey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,9 @@ public class DecryptImage extends AppCompatActivity {
                     encryptedString = encryptedData.getEncryptedData(); //암호화된 string
                     fileName = encryptedData.getFileName(); //원본 파일명
                     dataType = encryptedData.getDataType(); //데이터 타입
-
-                    decString=encryptCode.decByKey(password,encryptedString);
-                    Log.e("decCheck",decString);
+                    makekey = MakeKey(password);
+                    Log.v("test", "makekeyde: " + byteArrayToHexaString(makekey));
+                    decString=encryptCode.decByKey(makekey,encryptedString);
                     byte[] encodeByte = Base64.decode(decString, Base64.DEFAULT);
                     Toast.makeText(getApplicationContext(),"three", Toast.LENGTH_LONG).show();
                     Bitmap bitmapp = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);

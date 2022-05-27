@@ -2,23 +2,25 @@ package com.example.safecarrier;
 
 
 import android.util.Base64;
-import android.util.Log;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
+import java.io.UnsupportedEncodingException;
+import java.security.Key;
 import java.security.MessageDigest;
-import java.security.Security;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptCode {
     public static byte[] iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
 
     // 사용자 지정 키로 AES256 암호화
-    public static String encByKey(String key, String value) throws Exception {
-        return encByKey(key.getBytes(), value.getBytes());
+    public static String encByKey(byte[] key, String value) throws Exception {
+        return encByKey(key, value.getBytes());
     }
 
     // 사용자 지정 키로 AES256 복호화
@@ -31,9 +33,9 @@ public class EncryptCode {
     }
 
     // 사용자 지정 키로 AES256 복호화
-    public static String decByKey(String key, String plainText) throws Exception {
+    public static String decByKey(byte[] key, String plainText) throws Exception {
         System.out.println("KEY : "+key);
-        return decByKey(key.getBytes(), Base64.decode(plainText, 0));
+        return decByKey(key, Base64.decode(plainText, 0));
     }
 
     // 사용자 지정 키로 AES256 복호화
@@ -45,35 +47,42 @@ public class EncryptCode {
         return new String(secureKey);
     }
 
-    public static byte[] PBKDF1(String password) throws Exception {
-        int dkLen = 32;
-        int iteration = 1000;
-        byte[] salt = new byte[]{0x78, 0x57, (byte) 0x8e, 0x5a, 0x5d, 0x63, (byte) 0xcb, 0x06};
 
-        Security.addProvider(new BouncyCastleProvider());
 
-        MessageDigest md = MessageDigest.getInstance("SHA1");
+    public static byte[] MakeKey(String password)
+            throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeySpecException {
+        //암호키를 생성하는 팩토리 객체 생성
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        //다이제스트를 이용하여, SHA-512로 단방향 해시 생성 (salt 생성용)
+        MessageDigest digest = MessageDigest.getInstance("SHA-512");
 
-        byte[] input = new byte[Utils.toByteArray(password).length + salt.length];
+        // C# : byte[] keyBytes = System.Text.Encoding.UTF8.GetBytes(password);
+        byte[] keyBytes = password.getBytes("UTF-8");
+        // C# : byte[] saltBytes = SHA512.Create().ComputeHash(keyBytes);
+        byte[] saltBytes = digest.digest(keyBytes);
 
-        System.arraycopy(Utils.toByteArray(password), 0, input, 0, Utils.toByteArray(password).length);
-        System.arraycopy(salt, 0, input, Utils.toByteArray(password).length, salt.length); //password와 salt를 input에 넣는다
+        // 256bit (AES256은 256bit의 키, 128bit의 블록사이즈를 가짐.)
+        PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 256);
+        Key secretKey = factory.generateSecret(pbeKeySpec);
 
-        md.update(input);
+        // 256bit = 32byte
+        byte[] key = new byte[32];
+        System.arraycopy(secretKey.getEncoded(), 0, key, 0, 32);
+        String data = new String(key);
+        System.out.println(byteArrayToHexaString(key));
+        return key;
+        //AES 알고리즘을 적용하여 암호화키 생성
 
-        for (int i = 0; i < iteration - 1; i++) { //iteration번 만큼 반복한다
-            byte T[] = md.digest();
-            md.update(T);
+
+    }
+    public static String byteArrayToHexaString(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+
+        for (byte data : bytes) {
+            builder.append(String.format("%02X ", data));
         }
-        byte output[]=md.digest(); //결과값을 output에 저장한다
-        Log.v("test", "part6 "+output.toString());
-        byte[] result=new byte[dkLen];
 
-        System.arraycopy(output,0,result,0,dkLen); //output의 결과값을 dkLen만큼만 잘라서 result에 저장한다
-
-        return result;
-
-
+        return builder.toString();
     }
 
 
