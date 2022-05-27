@@ -1,5 +1,7 @@
 package com.example.safecarrier;
 
+import static com.example.safecarrier.EncryptCode.MakeKey;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +37,7 @@ public class DialogEnText extends AppCompatActivity {
     static public String link2;
     public String lid; //랜덤문자열
     public Long linkId; //1,2,3 이런 값 (기본키)
+    byte[] makekey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,13 +66,14 @@ public class DialogEnText extends AppCompatActivity {
             String temp =  textView.getText().toString();
             Log.v("test", "text: " + temp);
             try {
-                numberPassword2 =  password.getText().toString();
+               numberPassword2 =  password.getText().toString();
                 Log.v("test", "password: " + numberPassword2);
+                makekey=MakeKey(numberPassword2);
             } catch (Exception e) {
                 e.printStackTrace();
             }
                 try {
-                    encText = encryptCode.encByKey(numberPassword2, temp);
+                 encText = encryptCode.encByKey(makekey, temp);
 
                 } catch (IOException e) {
                     e.printStackTrace();

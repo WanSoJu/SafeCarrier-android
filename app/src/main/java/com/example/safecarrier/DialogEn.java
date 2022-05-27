@@ -1,6 +1,9 @@
 //원래 dialog로 창을 띄울려고 했으나 정보들이 쉽게 전달이 되지 않아 결국엔 페이지로 만들 수 밖에 없었다는 슬픈 전설
 package com.example.safecarrier;
 
+import static com.example.safecarrier.EncryptCode.MakeKey;
+import static com.example.safecarrier.EncryptCode.byteArrayToHexaString;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -48,7 +51,7 @@ public class DialogEn extends AppCompatActivity {
     static public String link = "setting";
     public String lid; //랜덤문자열
     Bitmap bitmap;
-    byte[] byteArray;
+    byte[] makekey;
     public Long linkId; //1,2,3 이런 값 (기본키)
 
     ///////////
@@ -124,7 +127,8 @@ public class DialogEn extends AppCompatActivity {
             number = Integer.parseInt(times.getText().toString());
             try {
                 numberPassword =  password.getText().toString();
-                Log.v("test", "part1 " + numberPassword);
+                makekey=MakeKey(numberPassword);
+                Log.v("test", "makekey: " + byteArrayToHexaString(makekey));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -141,7 +145,7 @@ public class DialogEn extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
                     byte[] bytes = baos.toByteArray();
                     String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    encText = encryptCode.encByKey(numberPassword, temp);
+                    encText = encryptCode.encByKey(makekey, temp);
 
                 } catch (IOException e) {
                     e.printStackTrace();
