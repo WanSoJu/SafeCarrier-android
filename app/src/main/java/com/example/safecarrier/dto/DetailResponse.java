@@ -2,7 +2,7 @@ package com.example.safecarrier.dto;
 
 public class DetailResponse {
     private String fileName;
-    private byte[] encryptedData;
+    private String encryptedData;
     private String dataType;
 
     public DetailResponse(String dataType) {
@@ -21,15 +21,15 @@ public class DetailResponse {
         this.fileName = fileName;
     }
 
-    public byte[] getEncryptedData() {
+    public String getEncryptedData() {
         return encryptedData;
     }
 
-    public void setEncryptedData(byte[] encryptedData) {
+    public void setEncryptedData(String encryptedData) {
         this.encryptedData = encryptedData;
     }
 
-    public DetailResponse(String fileName, byte[] encryptedData,String dataType) {
+    public DetailResponse(String fileName, String encryptedData,String dataType) {
         this.fileName = fileName;
         this.encryptedData = encryptedData;
         this.dataType=dataType;
