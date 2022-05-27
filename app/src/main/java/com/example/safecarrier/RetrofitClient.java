@@ -77,6 +77,7 @@ public class RetrofitClient {
 
             @Override
             public void onFailure(Call<DetailResponse> call, Throwable t) {
+                t.printStackTrace();
                 System.out.println("get Detail Data By Lid Fail");
             }
         });
