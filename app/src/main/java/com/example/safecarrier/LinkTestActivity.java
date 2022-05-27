@@ -54,7 +54,7 @@ public class LinkTestActivity extends AppCompatActivity {
             public void onClick(View view) {
                 byte[] test={'a','b','c','d'};
                 //retrofit 데이터 전송 API 사용 예시
-                DataDto dataDto = new DataDto(test, "TEXT", 3, link.get("link"), link.get("lid"), "test");
+                DataDto dataDto = new DataDto(new String(test), "TEXT", 3, link.get("link"), link.get("lid"), "test");
                 int code;
                 //Retrofit 내에 메소드 구성은 몰라도 되고, "어떤 메소드를 써야하는지만 알면 됨! + 어떤 파라미터를 넣어주면 되고 응답값이 무엇인지 (dto 패키지 밑의 ResponseWithCode 참고)
                 retrofit.postData(dataDto, new RetrofitCallback() {
