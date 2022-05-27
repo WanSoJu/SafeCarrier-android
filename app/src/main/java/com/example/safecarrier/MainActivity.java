@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), DialogEn.class);
                     startActivity(intent);
                 }else if (menuItem.getItemId() == R.id.action_menu2){
-                    Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
+                    Intent intent2 = new Intent(getApplicationContext(), DialogEnVideo.class);
+                    startActivity(intent2);
                 }else {
                     Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
                 }
