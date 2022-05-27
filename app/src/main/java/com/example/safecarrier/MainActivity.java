@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent2 = new Intent(getApplicationContext(), DialogEnVideo.class);
                     startActivity(intent2);
                 }else {
-                    Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
+                    Intent intent3 = new Intent(getApplicationContext(), DialogEnText.class);
+                    startActivity(intent3);
                 }
 
                 return false;

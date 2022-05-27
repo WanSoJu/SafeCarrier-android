@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="75dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="17dp"
+            android:text="파일"
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextTextPersonName"
+                android:layout_marginTop="5dp"
+                android:layout_width="290dp"
+                android:layout_height="180dp"
+                android:layout_marginStart="60dp"
+                android:gravity="top"
+                android:padding="15dp"
+                android:ems="10"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
+                android:scrollHorizontally="false"
+                android:hint="내용을 입력하세요."
+                android:background="@drawable/text_border"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+
+
+
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="136dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="60dp"
+            android:text="열람 횟수"
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextNumber"
+                android:layout_width="65dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="68dp"
+                android:layout_marginEnd="9dp"
+                android:layout_marginBottom="412dp"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="58dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="212dp"
+                android:text="회"
+                android:textSize="25sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="73dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="68dp"
+            android:text="암호"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextNumberPassword"
+                android:layout_width="141dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginBottom="276dp"
+                android:ems="10"
+                android:inputType="numberPassword" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                android:text="암호랜덤생성" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="260dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginBottom="172dp"
+            android:text="링크 생성 하기"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
