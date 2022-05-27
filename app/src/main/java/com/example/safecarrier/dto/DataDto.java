@@ -1,7 +1,7 @@
 package com.example.safecarrier.dto;
 
 public class DataDto {
-    private byte[] encryptedData;
+    private String encryptedData;
     private String dataType;
     private int readLimit;
     private String appLink;
@@ -10,7 +10,7 @@ public class DataDto {
 
     public DataDto(){}
 
-    public DataDto(byte[] encryptedData, String dataType, int readLimit, String appLink, String lid, String fileName) {
+    public DataDto(String encryptedData, String dataType, int readLimit, String appLink, String lid, String fileName) {
         this.encryptedData = encryptedData;
         this.dataType = dataType;
         this.readLimit = readLimit;
@@ -19,11 +19,11 @@ public class DataDto {
         this.fileName = fileName;
     }
 
-    public byte[] getEncryptedData() {
+    public String getEncryptedData() {
         return encryptedData;
     }
 
-    public void setEncryptedData(byte[] encryptedData) {
+    public void setEncryptedData(String encryptedData) {
         this.encryptedData = encryptedData;
     }
 

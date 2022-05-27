@@ -157,7 +157,7 @@ public class DialogEn extends AppCompatActivity {
 
                     link=shortLink;
 
-                    DataDto dataDto = new DataDto(encText, "IMAGE", number, shortLink, lid, name_Str);
+                    DataDto dataDto = new DataDto(new String(encText), "IMAGE", number, shortLink, lid, name_Str);
                     System.out.println("link not null, sending data to server");
 
                     retrofit.postData(dataDto, new RetrofitCallback() {
