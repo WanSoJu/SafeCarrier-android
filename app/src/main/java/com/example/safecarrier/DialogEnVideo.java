@@ -144,7 +144,8 @@ public class DialogEnVideo extends AppCompatActivity {
                                     link=shortLink;
                                     String needToEncrypt=lid+"success";
                                     /**
-                                     * needToEncrypt 변수를 암호화해서 DataDto 에 넣어서 전송!
+                                     * 위의 needToEncrypt 변수를 암호화해서 DataDto 에 넣어서 전송!
+                                     * 복호화 시, 뒤에 success 가 나오면 복호화 성공
                                      */
 
 //                                    DataDto dataDto = new DataDto(new String(encText), "VIDEO", number, shortLink, lid, name_Str);
@@ -193,22 +194,13 @@ public class DialogEnVideo extends AppCompatActivity {
                                     });
 
                                     //전역변수 linkId 꺼내가서 백으로 요청
-
                                 }
                             });
                         }
                     }
                 });
-
             }
 
-
-
-
-            //sendData
-//            link
-            //Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
-            //startActivity(intent);
         }
     };
 
