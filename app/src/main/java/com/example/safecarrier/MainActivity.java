@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,8 +63,26 @@ public class MainActivity extends AppCompatActivity {
 
 //DialogEn 화면 출력
     public void onClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), DialogEn.class);
-        startActivity(intent);
+        final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
+        getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_menu1){
+                    Intent intent = new Intent(getApplicationContext(), DialogEn.class);
+                    startActivity(intent);
+                }else if (menuItem.getItemId() == R.id.action_menu2){
+                    Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
+                }
+
+                return false;
+            }
+        });
+        popupMenu.show();
+       // Intent intent = new Intent(getApplicationContext(), DialogEn.class);
+       // startActivity(intent);
     }
 
 
