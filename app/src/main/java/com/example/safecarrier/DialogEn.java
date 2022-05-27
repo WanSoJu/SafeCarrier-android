@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,12 +44,17 @@ public class DialogEn extends AppCompatActivity {
     public String type;
     static public String numberPassword;
     public Uri uri;
-    public byte[] encText;
+    public String encText;
     static public String link;
     public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] byteArray;
     public Long linkId; //1,2,3 이런 값 (기본키)
+
+    ///////////
+    String decCheck;
+    ImageView Img;
+    /////////
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,9 @@ public class DialogEn extends AppCompatActivity {
         Button testBtn = (Button)findViewById(R.id.button2);
         testBtn.setOnClickListener(t);
         retrofit = RetrofitClient.getInstance(this).createApi();
+
+        ////////
+        Img=(ImageView) findViewById(R.id.imgimg);
 
     }
     Button.OnClickListener t = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
@@ -123,11 +133,15 @@ public class DialogEn extends AppCompatActivity {
                 try {
                     //Uri를 사진 비트맵으로 변환
                     bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(), uri));
-                    //비트맵 바이트로 변환
-                    byteArray = bitmapToByteArray(bitmap);
-                    //키가 32바이트 이어야만 한다......
-                    encText = encryptCode.encByKey(numberPassword.getBytes(), byteArray);
 
+                    //키가 32바이트 이어야만 한다......
+
+                    //bitmap to string
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+                    byte[] bytes = baos.toByteArray();
+                    String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    encText = encryptCode.encByKey(numberPassword, temp);
 
                 } catch (IOException e) {
                     e.printStackTrace();
