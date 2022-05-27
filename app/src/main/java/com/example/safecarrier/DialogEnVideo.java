@@ -25,7 +25,13 @@ import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
+import java.io.File;
+import java.util.Objects;
 import java.util.Random;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class DialogEnVideo extends AppCompatActivity {
     private final static int FILECHOOSER_NORMAL_REQ_CODE = 0;
@@ -112,48 +118,92 @@ public class DialogEnVideo extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //사진일 경우
+            //영상일 경우
+            if (Objects.equals(type,"mp4")) {
 
+                //업로드 된 mp4 파일 영상파일로 반환 -> 서버에 업로드
+               String vidPath = getFilePath(uri);
+                System.out.println("vidPath = " + vidPath);
+                File file = new File(vidPath);
+                RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+                MultipartBody.Part body=MultipartBody.Part.createFormData("file",name_Str,requestBody);
+                retrofit.uploadFile(body, new RetrofitCallback() {
+                    @Override
+                    public void onResponseSuccess(int code, Object receivedData) {
+//                        System.out.println("code = " + code);
 
-            createDynamicLink(new LinkCallback() {
-                @Override
-                public void onLinkSuccess(String shortLink) {
-
-                    link=shortLink;
-
-                    DataDto dataDto = new DataDto(new String(encText), "VIDEO", number, shortLink, lid, name_Str);
-                    System.out.println("link not null, sending data to server");
-
-                    retrofit.postData(dataDto, new RetrofitCallback() {
-                        @Override
-                        public void onResponseSuccess(int code, Object receivedData) {
-                            //암호화된 데이터 조회: DetailResponse 로 캐스팅,  전체 데이터 조회: List<AllResponse> 로 캐스팅,  복호화 성공 알림 후 잔여 조회수 조회: int 로 캐스팅
-                            linkId = (Long) receivedData;
-                            Log.v("test", "code : "+code);
-                            if (code == 200) {
-                                Log.v("test", "part6 ");
-                                System.out.println("등록 성공");
-                                System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
-                                link = shortLink;
-                                Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
-                                startActivity(intent);
-                            } else if (code == 409) {
-                                System.out.println("**********"+code+"*****************");
-                                //이 때의 linkId 는 null
-                            } else if (code == 400) {
-                                //잘못된 요청
-                                System.out.println("*************"+code+"**********");
-
-                            }
-
+                        if(code==400){
+                            System.out.println("Upload Video File Response 400 BAD_REQUEST");
                         }
 
-                    });
+                        if(code==200){
+                            createDynamicLink(new LinkCallback() {
+                                @Override
+                                public void onLinkSuccess(String shortLink) {
 
-                    //전역변수 linkId 꺼내가서 백으로 요청
+                                    link=shortLink;
+                                    String needToEncrypt=lid+"success";
+                                    /**
+                                     * needToEncrypt 변수를 암호화해서 DataDto 에 넣어서 전송!
+                                     */
 
-                }
-            });
+//                                    DataDto dataDto = new DataDto(new String(encText), "VIDEO", number, shortLink, lid, name_Str);
+                                    DataDto dataDto = new DataDto(needToEncrypt, "VIDEO", number, shortLink, lid, name_Str);
+
+                                    retrofit.postData(dataDto, new RetrofitCallback() {
+                                        @Override
+                                        public void onResponseSuccess(int code, Object receivedData) {
+
+                                            linkId = (Long) receivedData;
+                                            Log.v("test", "code : "+code);
+                                            if (code == 200) {
+                                                Log.v("test", "part6 ");
+                                                System.out.println("등록 성공");
+                                                System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                                                link = shortLink;
+
+                                                /**
+                                                 * 아래는 등록 후 videoUrl 과 잔여 조회회수가 잘 넘어오는지 확인하기 위한 테스트 코드
+                                                 * (원래는 복호화 성공 후 호출하는 부분)
+                                                 */
+//                                                retrofit.alertDecryptSuccessAndGetLeftReadcount(lid, new RetrofitCallback() {
+//                                                    @Override
+//                                                    public void onResponseSuccess(int code, Object receivedData) throws Exception {
+//                                                        if(code==200){
+//                                                            ReadCountResponse receivedData2 = (ReadCountResponse) receivedData;
+//                                                            Integer leftReadCount = receivedData2.getLeftReadCount();
+//                                                            System.out.println("leftReadCount = " + leftReadCount);
+//                                                            String videoUrl = receivedData2.getVideoUrl();
+//                                                            System.out.println("videoUrl = " + videoUrl);
+//                                                        }
+//                                                    }
+//                                                });
+
+
+                                                Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
+                                                startActivity(intent);
+                                            } else if (code == 409) {
+                                                System.out.println("**********"+code+"*****************");
+                                                //이 때의 linkId 는 null
+                                            } else if (code == 400) {
+                                                //잘못된 요청
+                                                System.out.println("*************"+code+"**********");
+                                            }
+                                        }
+                                    });
+
+                                    //전역변수 linkId 꺼내가서 백으로 요청
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+            }
+
+
+
 
             //sendData
 //            link
@@ -161,6 +211,15 @@ public class DialogEnVideo extends AppCompatActivity {
             //startActivity(intent);
         }
     };
+
+    //파일 원본 경로 가져옴
+    private String getFilePath(Uri data){
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(data, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 
     //파일 이름 불러오는 함수
     public String getImageNameToUri(Uri data) {
