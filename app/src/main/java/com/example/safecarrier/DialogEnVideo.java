@@ -1,5 +1,7 @@
 package com.example.safecarrier;
 
+import static com.example.safecarrier.EncryptCode.MakeKey;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -39,14 +41,15 @@ public class DialogEnVideo extends AppCompatActivity {
     public String name_Str = "first";
     public int number;
     public String type;
-    static public String numberPassword;
+    static public String numberPassword3 = "video";
     public Uri uri;
-    public byte[] encText;
-    static public String link;
+    public String encText;
+    static public String link3 = "video";
     public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] byteArray;
     public Long linkId; //1,2,3 이런 값 (기본키)
+    byte[] makekey;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,14 +116,20 @@ public class DialogEnVideo extends AppCompatActivity {
             EncryptCode encryptCode = new EncryptCode();
             number = Integer.parseInt(times.getText().toString());
             try {
-                numberPassword =  password.getText().toString();
-                Log.v("test", "part1 " + numberPassword);
+                numberPassword3 =  password.getText().toString();
+                Log.v("test", "part1 " + numberPassword3);
+                makekey=MakeKey(numberPassword3);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             //영상일 경우
             if (Objects.equals(type,"mp4")) {
-
+                String needToEncrypt=lid+"success";
+                try {
+                    encText = encryptCode.encByKey(makekey, needToEncrypt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 //업로드 된 mp4 파일 영상파일로 반환 -> 서버에 업로드
                String vidPath = getFilePath(uri);
                 System.out.println("vidPath = " + vidPath);
@@ -141,15 +150,16 @@ public class DialogEnVideo extends AppCompatActivity {
                                 @Override
                                 public void onLinkSuccess(String shortLink) {
 
-                                    link=shortLink;
-                                    String needToEncrypt=lid+"success";
+                                    link3=shortLink;
                                     /**
                                      * 위의 needToEncrypt 변수를 암호화해서 DataDto 에 넣어서 전송!
                                      * 복호화 시, 뒤에 success 가 나오면 복호화 성공
                                      */
 
+
+
 //                                    DataDto dataDto = new DataDto(new String(encText), "VIDEO", number, shortLink, lid, name_Str);
-                                    DataDto dataDto = new DataDto(needToEncrypt, "VIDEO", number, shortLink, lid, name_Str);
+                                    DataDto dataDto = new DataDto(encText, "VIDEO", number, shortLink, lid, name_Str);
 
                                     retrofit.postData(dataDto, new RetrofitCallback() {
                                         @Override
@@ -161,7 +171,7 @@ public class DialogEnVideo extends AppCompatActivity {
                                                 Log.v("test", "part6 ");
                                                 System.out.println("등록 성공");
                                                 System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
-                                                link = shortLink;
+                                                link3 = shortLink;
 
                                                 /**
                                                  * 아래는 등록 후 videoUrl 과 잔여 조회회수가 잘 넘어오는지 확인하기 위한 테스트 코드

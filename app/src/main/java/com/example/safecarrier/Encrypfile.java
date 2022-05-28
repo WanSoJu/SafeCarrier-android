@@ -5,6 +5,8 @@ import static com.example.safecarrier.DialogEn.link;
 import static com.example.safecarrier.DialogEn.numberPassword;
 import static com.example.safecarrier.DialogEnText.link2;
 import static com.example.safecarrier.DialogEnText.numberPassword2;
+import static com.example.safecarrier.DialogEnVideo.link3;
+import static com.example.safecarrier.DialogEnVideo.numberPassword3;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -27,17 +29,24 @@ public class Encrypfile extends AppCompatActivity {
         setContentView(R.layout.activity_show_link);
         TextView showLink=findViewById(R.id.genlinktextview2);
         TextView showPassword=findViewById(R.id.genlinktextview3);
-        if(link == "setting"){
+        if(link == "setting" && link3 == "video"){
             System.out.println("link" + link2);
             showLink.append(link2);
+        }
+        else if(link == "setting" && link2 == "text"){
+            System.out.println("link" + link3);
+            showLink.append(link3);
         }
         else{
             System.out.println("link" + link);
             showLink.append(link);
         }
 
-        if(numberPassword == "setting"){
+        if(numberPassword == "setting" && numberPassword3 == "video"){
             showPassword.append(numberPassword2);
+        }
+        else if(numberPassword == "setting" && numberPassword2 == "text"){
+            showPassword.append(numberPassword3);
         }
         else {
             showPassword.append(numberPassword);
