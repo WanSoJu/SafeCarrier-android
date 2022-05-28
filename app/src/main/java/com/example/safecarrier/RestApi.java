@@ -3,7 +3,7 @@ package com.example.safecarrier;
 import com.example.safecarrier.dto.AllResponse;
 import com.example.safecarrier.dto.DataDto;
 import com.example.safecarrier.dto.DetailResponse;
-import com.example.safecarrier.dto.ReadCountResponse;
+import com.example.safecarrier.dto.UrlResponse;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public interface RestApi {
 
     @Headers("Cache-control: no-cache")
     @GET("data/read/{lid}")
-    Call<ReadCountResponse> getLeftReadCount(@Path("lid") String lid);
+    Call<Integer> getLeftReadCount(@Path("lid") String lid);
 
     @Headers("Cache-control: no-cache")
     @GET("data/link/{linkId}")
@@ -42,6 +42,6 @@ public interface RestApi {
     @Headers("Cache-control: no-cache")
     @Multipart
     @POST("data/video")
-    Call<String> postFile(@Part MultipartBody.Part file);
+    Call<UrlResponse> postFile(@Part MultipartBody.Part file);
 
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.example.safecarrier.dto.AllResponse;
 import com.example.safecarrier.dto.DataDto;
 import com.example.safecarrier.dto.DetailResponse;
-import com.example.safecarrier.dto.ReadCountResponse;
+import com.example.safecarrier.dto.UrlResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -118,9 +118,9 @@ public class RetrofitClient {
 
     //복호화 성공 시, 복호화 성공 여부 알리고 "이번 조회 이후" 잔여 조회횟수 반환
     public void alertDecryptSuccessAndGetLeftReadcount(String lid,  RetrofitCallback callback){
-        restApi.getLeftReadCount(lid).enqueue(new Callback<ReadCountResponse>() {
+        restApi.getLeftReadCount(lid).enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ReadCountResponse> call, Response<ReadCountResponse> response) {
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
                 try {
                     callback.onResponseSuccess(response.code(), response.body());
                 } catch (Exception e) {
@@ -129,7 +129,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<ReadCountResponse> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 System.out.println("Alert Decryption Success and Get Left Read Count Fail");
             }
         });
@@ -157,9 +157,9 @@ public class RetrofitClient {
     }
 
     public void uploadFile(MultipartBody.Part body, RetrofitCallback callback){
-        restApi.postFile(body).enqueue(new Callback<String>() {
+        restApi.postFile(body).enqueue(new Callback<UrlResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<UrlResponse> call, Response<UrlResponse> response) {
                 try {
                     callback.onResponseSuccess(response.code(),response.body());
                 } catch (Exception e) {
@@ -168,7 +168,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<UrlResponse> call, Throwable t) {
                 t.printStackTrace();
                 System.out.println("upload video fail !!!!!");
 

@@ -16,7 +16,6 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.safecarrier.dto.DetailResponse;
-import com.example.safecarrier.dto.ReadCountResponse;
 
 public class DecryptVideo extends AppCompatActivity {
     EncryptCode encryptCode = new EncryptCode();
@@ -59,6 +58,10 @@ public class DecryptVideo extends AppCompatActivity {
                     Log.v("test", "makekeyde: " + byteArrayToHexaString(makekey));
                     decString=encryptCode.decByKey(makekey,encryptedString);
 
+                    if(decString.contains("success")){
+                        decString = decString.substring(0, decString.length() - 7);
+                    }
+
                     //여기서부터 조회횟수--
                     retrofit.alertDecryptSuccessAndGetLeftReadcount(lid, new RetrofitCallback() {
                         @Override
@@ -67,8 +70,10 @@ public class DecryptVideo extends AppCompatActivity {
 
                             //마찬가지로 호출 성공 시 이 부분 실행
 
-                            ReadCountResponse rc=(ReadCountResponse) receivedData;
-                            String videoUrl=rc.getVideoUrl();
+                            Integer rc=(Integer) receivedData;
+//                            String videoUrl=rc.getVideoUrl();
+//                            Log.e("VIDEO URL : ",videoUrl);
+                            String videoUrl=decString;
                             Log.e("VIDEO URL : ",videoUrl);
                             Uri uri = Uri.parse(videoUrl);
                             view.setVideoURI(uri);
@@ -79,7 +84,7 @@ public class DecryptVideo extends AppCompatActivity {
                                     mediaPlayer.start();
                                 }
                             });
-                            int leftReadCount = rc.getLeftReadCount(); //잔여 조회 횟수를 받아올 수 있음
+                            int leftReadCount = rc; //잔여 조회 횟수를 받아올 수 있음
                             leftRead.setText("   남은 조회 횟수 : "+String.valueOf(leftReadCount));
 
                             if(code==200)
