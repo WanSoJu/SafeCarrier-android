@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
@@ -26,7 +25,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //파일명을 위한 변수
-    Button bokhoBtn;
     private RetrofitClient retrofit;
     List file_name = new ArrayList();
     List file_count = new ArrayList();
@@ -49,14 +47,6 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.READ_EXTERNAL_STORAGE},1000); }
             return; }
 
-        bokhoBtn=(Button) findViewById(R.id.gotoEnterPassword);
-        bokhoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EnterPassword.class);
-                startActivity(intent);
-            }
-        });
 
     }
     // 권한 체크 이후로직
