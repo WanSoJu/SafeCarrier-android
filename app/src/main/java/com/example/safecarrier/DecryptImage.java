@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.safecarrier.dto.DetailResponse;
-import com.example.safecarrier.dto.ReadCountResponse;
 
 public class DecryptImage extends AppCompatActivity {
     EncryptCode encryptCode = new EncryptCode();
@@ -69,8 +68,8 @@ public class DecryptImage extends AppCompatActivity {
                         @Override
                         public void onResponseSuccess(int code, Object receivedData) {
                             //마찬가지로 호출 성공 시 이 부분 실행
-                            ReadCountResponse rc=(ReadCountResponse) receivedData;
-                            int leftReadCount = rc.getLeftReadCount(); //잔여 조회 횟수를 받아올 수 있음
+                            Integer rc=(Integer) receivedData;
+                            int leftReadCount = rc; //잔여 조회 횟수를 받아올 수 있음
                             leftRead.setText("   남은 조회 횟수 : "+String.valueOf(leftReadCount));
 
                             if(code==200)

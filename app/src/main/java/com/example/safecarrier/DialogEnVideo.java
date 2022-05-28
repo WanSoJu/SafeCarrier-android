@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.safecarrier.dto.DataDto;
+import com.example.safecarrier.dto.UrlResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
@@ -147,12 +148,12 @@ public class DialogEnVideo extends AppCompatActivity {
             }
             //영상일 경우
             if (Objects.equals(type,"mp4")) {
-                String needToEncrypt=lid+"success";
-                try {
-                    encText = encryptCode.encByKey(makekey, needToEncrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                String needToEncrypt=lid+"success";
+//                try {
+//                    encText = encryptCode.encByKey(makekey, needToEncrypt);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 //업로드 된 mp4 파일 영상파일로 반환 -> 서버에 업로드
                String vidPath = getFilePath(uri);
                 System.out.println("vidPath = " + vidPath);
@@ -169,16 +170,22 @@ public class DialogEnVideo extends AppCompatActivity {
                         }
 
                         if(code==200){
+                            /**
+                             * url+"success" 를 암호화 해서 저장하게 변경!
+                             */
+                            UrlResponse response = (UrlResponse) receivedData;
+                            String url=response.getVideoUrl();
+                            System.out.println("url = " + url);
+                            try {
+                                encText = encryptCode.encByKey(makekey, url+"success");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             createDynamicLink(new LinkCallback() {
                                 @Override
                                 public void onLinkSuccess(String shortLink) {
 
                                     link3=shortLink;
-                                    /**
-                                     * 위의 needToEncrypt 변수를 암호화해서 DataDto 에 넣어서 전송!
-                                     * 복호화 시, 뒤에 success 가 나오면 복호화 성공
-                                     */
-
 
 
 //                                    DataDto dataDto = new DataDto(new String(encText), "VIDEO", number, shortLink, lid, name_Str);
@@ -197,24 +204,6 @@ public class DialogEnVideo extends AppCompatActivity {
                                                 sharedPreference += linkId.toString()+",";
                                                 System.out.println("sharedPreference "+sharedPreference);
                                                 link3 = shortLink;
-
-                                                /**
-                                                 * 아래는 등록 후 videoUrl 과 잔여 조회회수가 잘 넘어오는지 확인하기 위한 테스트 코드
-                                                 * (원래는 복호화 성공 후 호출하는 부분)
-                                                 */
-//                                                retrofit.alertDecryptSuccessAndGetLeftReadcount(lid, new RetrofitCallback() {
-//                                                    @Override
-//                                                    public void onResponseSuccess(int code, Object receivedData) throws Exception {
-//                                                        if(code==200){
-//                                                            ReadCountResponse receivedData2 = (ReadCountResponse) receivedData;
-//                                                            Integer leftReadCount = receivedData2.getLeftReadCount();
-//                                                            System.out.println("leftReadCount = " + leftReadCount);
-//                                                            String videoUrl = receivedData2.getVideoUrl();
-//                                                            System.out.println("videoUrl = " + videoUrl);
-//                                                        }
-//                                                    }
-//                                                });
-
 
                                                 Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
                                                 startActivity(intent);
