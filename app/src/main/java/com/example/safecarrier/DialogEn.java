@@ -69,7 +69,6 @@ public class DialogEn extends AppCompatActivity {
         retrofit = RetrofitClient.getInstance(this).createApi();
         EditText password = (EditText) findViewById(R.id.editTextNumberPassword);
         ////////
-        Img=(ImageView) findViewById(R.id.imgimg);
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox) ;
         checkBox.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
