@@ -101,7 +101,7 @@
                 android:layout_marginStart="60dp"
                 android:layout_marginBottom="276dp"
                 android:ems="10"
-                android:inputType="numberPassword" />
+                android:inputType="number" />
 
             <CheckBox
                 android:id="@+id/checkBox"

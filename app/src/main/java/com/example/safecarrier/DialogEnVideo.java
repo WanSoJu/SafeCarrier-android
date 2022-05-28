@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -57,6 +58,27 @@ public class DialogEnVideo extends AppCompatActivity {
         Button testBtn = (Button)findViewById(R.id.button2);
         testBtn.setOnClickListener(t);
         retrofit = RetrofitClient.getInstance(this).createApi();
+        EditText password = (EditText) findViewById(R.id.editTextNumberPassword);
+        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox) ;
+        checkBox.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkBox.isChecked()){
+                    Random rand = new Random();
+                    String randNum = "";
+                    for(int i=0;i<8;i++) {
+                        String ran = Integer.toString(rand.nextInt(10));
+                        randNum += ran;
+                    }
+                    password.setText(randNum);
+
+                }
+                else{
+                    password.setText("");
+                }
+            }
+        }) ;
+
 
     }
     Button.OnClickListener t = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성

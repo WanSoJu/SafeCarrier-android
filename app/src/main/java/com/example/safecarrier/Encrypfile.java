@@ -32,24 +32,30 @@ public class Encrypfile extends AppCompatActivity {
         if(link == "setting" && link3 == "video"){
             System.out.println("link" + link2);
             showLink.append(link2);
+            link2="text";
         }
         else if(link == "setting" && link2 == "text"){
             System.out.println("link" + link3);
             showLink.append(link3);
+            link3 = "video";
         }
         else{
             System.out.println("link" + link);
             showLink.append(link);
+            link = "setting";
         }
 
         if(numberPassword == "setting" && numberPassword3 == "video"){
             showPassword.append(numberPassword2);
+            numberPassword2="text";
         }
         else if(numberPassword == "setting" && numberPassword2 == "text"){
             showPassword.append(numberPassword3);
+            numberPassword3="video";
         }
         else {
             showPassword.append(numberPassword);
+            numberPassword="setting";
         }
         Button copyLink = (Button)findViewById(R.id.button3);
         copyLink.setOnClickListener(t);
