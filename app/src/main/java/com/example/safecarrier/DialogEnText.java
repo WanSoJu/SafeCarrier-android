@@ -32,9 +32,9 @@ public class DialogEnText extends AppCompatActivity {
     private RetrofitClient retrofit;
     public String name_Str = "first";
     public int number;
-    static public String numberPassword2;
+    static public String numberPassword2 = "text";
     public String encText;
-    static public String link2;
+    static public String link2 = "text";
     public String lid; //랜덤문자열
     public Long linkId; //1,2,3 이런 값 (기본키)
     byte[] makekey;
