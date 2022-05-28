@@ -32,7 +32,7 @@ import java.util.Random;
 public class DialogEnText extends AppCompatActivity {
     private final static int FILECHOOSER_NORMAL_REQ_CODE = 0;
     private RetrofitClient retrofit;
-    public String name_Str = "first";
+    public String name_Str = "TEXT";
     public int number;
     static public String numberPassword2 = "text";
     public String encText;
