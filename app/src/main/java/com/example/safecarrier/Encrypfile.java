@@ -10,6 +10,7 @@ import static com.example.safecarrier.DialogEnVideo.numberPassword3;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +62,8 @@ public class Encrypfile extends AppCompatActivity {
         copyLink.setOnClickListener(t);
         Button copyPassword = (Button)findViewById(R.id.button4);
         copyPassword.setOnClickListener(t2);
+        Button success = (Button)findViewById(R.id.button5);
+        success.setOnClickListener(t3);
     }
 
     Button.OnClickListener t = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
@@ -80,6 +83,13 @@ public class Encrypfile extends AppCompatActivity {
             ClipData clipData = ClipData.newPlainText("CODE", textView.getText().toString().trim()); //클립보드에 ID라는 이름표로 id 값을 복사하여 저장
             clipboardManager.setPrimaryClip(clipData);
             Toast.makeText(getApplicationContext(), "코드가 복사되었습니다.", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+    Button.OnClickListener t3 = new Button.OnClickListener() { //Button.OnclickLisener의 객체생성
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
 
         }
     };

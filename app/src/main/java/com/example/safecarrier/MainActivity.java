@@ -1,5 +1,7 @@
 package com.example.safecarrier;
 
+import static com.example.safecarrier.DialogEn.sharedPreference;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,17 +9,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.safecarrier.dto.AllResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     //파일명을 위한 변수
     Button bokhoBtn;
-
+    private RetrofitClient retrofit;
+    List file_name = new ArrayList();
+    List file_count = new ArrayList();
+    String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }// 권한 체크 이후로직
+
+    }
+    // 권한 체크 이후로직
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grandResults) {
@@ -58,6 +73,83 @@ public class MainActivity extends AppCompatActivity {
                     check_result = false;break;}}
             // 권한 체크에 동의를 하지 않으면 안드로이드 종료
             if (check_result == true) {} else {finish();}}}
+    @Override
+    public void onResume() {
+        /*파일목록 띄우기*/
+        super.onResume();
+        retrofit = RetrofitClient.getInstance(this).createApi();
+        if(sharedPreference==""){
+
+        }
+       else{
+            String id = sharedPreference.substring(0, sharedPreference.length() - 1);
+            System.out.println("id shared: "+id);
+            retrofit.getAllDataBySender(id, new RetrofitCallback() {
+                @Override
+                public void onResponseSuccess(int code, Object receivedData) {
+                //이 사용자가 보낸 전체 데이터를 조회하므로, 노션 API 문서 대로 List 로 응답이 옴
+                    List<AllResponse> allResponses = (List<AllResponse>) receivedData;
+                    for (AllResponse response : allResponses) {
+                        String fileName = response.getFileName();
+                        file_name.add(fileName);
+                        String lid1 = response.getLid();
+                        Integer leftReadCount = response.getLeftCount();
+                        file_count.add(String.valueOf(leftReadCount));
+                        System.out.println("file_count: "+file_count.get(0));
+                        Long linkId = response.getLinkId();
+                    }
+                    if (code == 200){
+                        System.out.println("잔여 횟수가 남은 데이터가 없으면: 빈 값이 옴 (null 또는 empty list) / 그 외에는 List<AllResponse> 가 옴");
+                       ListView listView = (ListView) findViewById(R.id.listView);
+                        MyAdapter adapter = new MyAdapter();
+                        for(int i=0; i<file_name.size();i++){
+                            adapter.addItem(new MyItem((String)file_name.get(i),(String)file_count.get(i) ));
+                        }
+                        file_name.clear();
+                        file_count.clear();
+                        listView.setAdapter(adapter);
+                     }}
+                 });
+        }
+    }
+
+    class MyAdapter extends BaseAdapter {
+
+        private ArrayList<MyItem> items = new ArrayList<>();
+
+        public void addItem(MyItem item){
+            items.add(item);
+        }
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public MyItem getItem(int position) {
+            return items.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, final View convertView, ViewGroup parent) {
+            MyItemView view = new MyItemView(getApplicationContext());
+
+            MyItem item = items.get(position);
+            view.setFile(item.getFile());
+            view.setTime(item.getTime());
+
+            return view;
+        }
+    }
+
+
+
 
 
 //DialogEn 화면 출력

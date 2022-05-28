@@ -81,6 +81,15 @@
         android:layout_marginBottom="30dp"
         android:text="암호 복사 하기"
         />
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="80dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="300dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="80dp"
+            android:text="완료"
+            />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

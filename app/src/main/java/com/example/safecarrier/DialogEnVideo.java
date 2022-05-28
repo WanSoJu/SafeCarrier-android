@@ -1,5 +1,6 @@
 package com.example.safecarrier;
 
+import static com.example.safecarrier.DialogEn.sharedPreference;
 import static com.example.safecarrier.EncryptCode.MakeKey;
 
 import android.content.Intent;
@@ -193,6 +194,8 @@ public class DialogEnVideo extends AppCompatActivity {
                                                 Log.v("test", "part6 ");
                                                 System.out.println("등록 성공");
                                                 System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                                                sharedPreference += linkId.toString()+",";
+                                                System.out.println("sharedPreference "+sharedPreference);
                                                 link3 = shortLink;
 
                                                 /**
