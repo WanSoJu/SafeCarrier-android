@@ -53,6 +53,7 @@ public class DialogEn extends AppCompatActivity {
     public String lid; //랜덤문자열
     Bitmap bitmap;
     byte[] makekey;
+    public static String sharedPreference="";
     public Long linkId; //1,2,3 이런 값 (기본키)
 
     ///////////
@@ -208,6 +209,9 @@ public class DialogEn extends AppCompatActivity {
                                 Log.v("test", "part6 ");
                                 System.out.println("등록 성공");
                                 System.out.println("이번에 등록된 링크의 PK (Primary key), 즉 linkId == " + linkId);
+                                sharedPreference += linkId.toString()+",";
+                                System.out.println("sharedPreference "+sharedPreference);
+
                                 link = shortLink;
                                 Intent intent = new Intent(getApplicationContext(), Encrypfile.class);
                                 startActivity(intent);
