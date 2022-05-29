@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -166,6 +167,27 @@ public class MainActivity extends AppCompatActivity {
         popupMenu.show();
        // Intent intent = new Intent(getApplicationContext(), DialogEn.class);
        // startActivity(intent);
+    }
+
+    private long backpressedTime = 0;
+    @Override
+    public void onBackPressed() {
+
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            exitProgram();
+        }
+
+    }
+
+    private void exitProgram() {
+        finishAffinity();
+        System.runFinalization();
+        System.exit(0);
+
+
     }
 
 
