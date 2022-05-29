@@ -165,7 +165,7 @@ public class DialogEn extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
                     byte[] bytes = baos.toByteArray();
                     String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    encText = encryptCode.encByKey(makekey, temp);
+                    encText = encryptCode.encByKey(makekey, temp+"success");
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -15,13 +15,13 @@
             android:id="@+id/leftReadText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="" />
 
         <TextView
             android:id="@+id/showText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="잠시 기다려주세요" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

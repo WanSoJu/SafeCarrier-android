@@ -96,7 +96,7 @@ public class DialogEnText extends AppCompatActivity {
                 e.printStackTrace();
             }
                 try {
-                 encText = encryptCode.encByKey(makekey, temp);
+                 encText = encryptCode.encByKey(makekey, temp+"success");
 
                 } catch (IOException e) {
                     e.printStackTrace();
