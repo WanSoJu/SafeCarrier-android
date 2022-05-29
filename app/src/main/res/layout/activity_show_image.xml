@@ -14,7 +14,7 @@
             android:id="@+id/leftRead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="잠시 기다려주세요" />
 
         <ImageView
             android:id="@+id/imageView"
