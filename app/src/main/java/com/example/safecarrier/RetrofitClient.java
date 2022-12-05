@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private RestApi restApi;
-    public String baseUrl="http://52.79.132.248:8080/";
+    public String baseUrl="http://52.79.208.231:8080/";
     private static Retrofit retrofit;
     private static Context mContext;
 
